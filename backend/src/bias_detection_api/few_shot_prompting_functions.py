@@ -2,6 +2,12 @@ import re
 from openai import OpenAI
 from pathlib import Path
 
+"""
+TODO:
+    - add more context (so the rewrites make more sense)
+    - separate into bias detection, and mitigation functions
+"""
+
 def load_key():
     key_path = Path(__file__).parent / "private" / "api_key.txt"
     return key_path.read_text().strip()
