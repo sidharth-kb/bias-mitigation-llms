@@ -1,6 +1,6 @@
 import re
 from openai import OpenAI
-from pathlib import Path
+from bias_detection_api.helpers.load_key import load_key
 
 """
 TODO:
@@ -8,50 +8,8 @@ TODO:
     - separate into bias detection, and mitigation functions
 """
 
-def load_key():
-    key_path = Path(__file__).parent / "private" / "api_key.txt"
-    return key_path.read_text().strip()
-
-
 client = OpenAI(api_key=load_key())
 
-def tag_biased_sections(text):
-    response = client.chat.completions.create(
-            model = "gpt-4.1-mini",
-            messages = [
-                {"role": "system", "content": "You are a bias detection system that identifies where bias exists in text, and surrounds those sections with <><> tags"},
-                {
-                    "role": "user",
-                    "content": "During the meeting, Mark mentioned that women aren’t usually good at negotiating salaries, so he suggested offering them lower starting pay."
-                    },
-                {
-                    "role": "assistant",
-                    "content": "During the meeting, Mark mentioned that <>women aren’t usually good at negotiating salaries<>, so he suggested offering them lower starting pay."
-                    },
-                {
-                    "role": "user",
-                    "content": "The principal claimed that students from poor neighborhoods don’t value education as much as others, which is why their grades are lower."
-                    },
-                {
-                    "role": "assistant",
-                    "content": "The principal claimed that <>students from poor neighborhoods don’t value education<>, which is why their grades are lower."
-                    },
-                {
-                    "role": "user",
-                    "content": "Our manager decided not to include older employees in the new software training, saying the elderly can’t learn new technologies quickly anyway."
-                    },
-                {
-                    "role": "assistant",
-                    "content": "Our manager decided not to include older employees in the new software training, saying <>the elderly can’t learn new technologies quickly<> anyway."
-                    },
-                {
-                    "role": "user",
-                    "content": text 
-                    },
-                ]
-            )
-
-    return response.choices[0].message.content
 
 def remove_section_bias(section):
     response = client.chat.completions.create(
