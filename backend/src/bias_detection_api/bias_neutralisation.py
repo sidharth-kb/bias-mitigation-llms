@@ -2,6 +2,11 @@ from openai import OpenAI
 # from bias_detection_api.helpers.load_key import load_key
 from helpers.load_key import load_key
 
+"""
+TODO:
+- [ ] create unit tests
+"""
+
 CLIENT = OpenAI(api_key=load_key())
 
 def remove_section_bias(section):
