@@ -8,6 +8,7 @@
 \usepackage{algorithm}
 \usepackage{verbatim}
 \usepackage[style=authoryear]{biblatex}
+\usepackage{graphicx}
 
 \onehalfspacing
 
@@ -338,13 +339,21 @@ The above outlines a valid json request to the endpoint.
 
 \end{verbatim}
 
+\subsubsection{Front-End}
+
+\includegraphics[width=\textwidth]{images/front-end-prototype.jpg}
+
+The front-end is extremely bare-bones, literally just an input text box, a submit
+button which sends the text to the api, and an output box to display the result.
+
 \subsection{Evalutation of Initial Prototype}
 
 The initial prototype works, but barely. It can turn an explicity biased text into
 one that is implicity biased. Wich might be worse in a way, since implicit bias
 is far more problematic.
 
-For example take the following test case \parencite{chatgpt2025}:
+For example take the following test case - biased text generated 
+by chatGPT \parencite{chatgpt2025}:
 
 \begin{verbatim}
 tests/test_tag_biased_sections The manager claimed that 
