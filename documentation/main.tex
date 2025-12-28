@@ -1,0 +1,384 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath, amssymb}
+\usepackage{hyperref}
+\usepackage{setspace}
+\usepackage{microtype}
+\usepackage{algpseudocode}
+\usepackage{algorithm}
+\usepackage{verbatim}
+\usepackage[style=authoryear]{biblatex}
+
+\onehalfspacing
+
+\addbibresource{references.bib}
+
+\title{Bias Mitigation and Detection Documentation}
+\author{Sidharth Kolladikkal Biju}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{Bias Neutralisation Subsystem Prototype}
+
+\subsection{Identifying Bias}
+
+\subsubsection{Rationale}
+
+First we need to identify whether or not the original text has any bias in the
+first place. There's no point trying to remove the bias in a text that has none.
+This step will save costs, and improve the efficiency of the overall process.
+\\
+
+For the prototype I decided to use few-shot prompting, which is quick and easy,
+but shown to be unreliable for NLP type tasks, especially when asked to explain
+their chain of reasoning \parencite{ye_durrett_2022}.
+Therefore I will only be using it as a placeholder for other methods I plan to
+implement, namely RAG.
+
+\subsubsection{Algorithm}
+
+\begin{algorithm}[H]
+  \caption{Bias Tagger}
+  \begin{algorithmic}
+    \Require userInput : string
+    \Require exampleData : Array[(string, string)]
+    \Require LLM : string $\to$ string
+
+    \\
+
+    \State $\text{Role} : \text{enum} \gets \{\text{SYSTEM}, \text{USER}, \text{ASSISTANT}\}$
+    \State messages : Array[(Role, string)]
+    \\
+
+    \State messages $\gets$ append $\left(
+      \text{Role.SYSTEM},
+      \text{'tag biased sections'}
+    \right)$
+
+    \\
+
+
+    \For{$(\text{original, tagged})$ in $\text{exampleData}$}
+      \State messages $\gets$ append{(Role.USER, original)}
+      \State messages $\gets$ append{(Role.ASSISTANT, tagged)}
+    \EndFor
+
+    \\
+
+    \State LLM.messages $\gets$ messages
+    \\
+    \State taggedText $\gets$ LLM(userInput)
+
+    \\
+    \\
+
+    \Return taggedText
+
+  \end{algorithmic}
+\end{algorithm}
+
+\subsubsection{implementation - Python}
+
+
+\begin{verbatim}
+def tag_biased_sections(userInput, exampleData, llm):
+    messages = []
+    messages.append({
+      "role": "system",
+      "content": "You are a bias detection system 
+                that identifies where bias exists in text, and surrounds those 
+                sections with <><> tags"
+    })
+
+    for example in exampleData:
+      messages.append({"role": "user", "content": example[0]})
+      messages.append({"role": "assistant", "content": example[1]})
+
+    messages.append({"role": "user", "content": userInput})
+
+  response = llm.chat.completions.create(model="gpt-4.1-mini", messages=messages)
+  return response.choices[0].message.content
+\end{verbatim}
+
+---
+\\
+For the implementation I decided to tag the biased sections with \verb|<><>| tags.
+
+
+
+\subsection{Parsing and Removing Bias}
+
+\subsubsection{Rationale}
+
+For the parsing I decided to use Regex, which is a standard way to parse strings
+I scan the tagged string to see if it actually has any tags in it. I then append
+all of the tagged sections into an array. My reasoning for this is that by creating
+an array of biased sections to rewrite, rather than rewriting the whole document, I
+can take advantage of two things: 
+
+\begin{enumerate}
+  \item Parallelisation
+  \item Enhanced user interactivity
+\end{enumerate}
+
+Point 1 is key for performance, I have essentially created a job queue, where each
+job is independent of the other. This is the perfect opportunity to parallelise the
+workload. This will speed up the performance of the system, where the LLMs only
+have to rewrite a small amount of text at each time.
+\\
+\\
+Point 2 is more related to user interaction, I plan to allow the user to select which
+parts of the text to rewrite, giving them control over what is re-written in their text.
+It will also be useful for highlighting which parts of the text are biased, and also add
+additional annotations to these parts of the text.
+\\
+
+Overall this method will reduce costs, because even if the user decides to rewrite all
+of the biased sections, it will only be a subset of the whole text.
+\\
+
+For the actual de-biasing of the sections, I'm using an LLM post-trained through
+few-shot prompting.
+
+\subsubsection{Algorithm}
+
+\begin{algorithm}[H]
+  \caption{textParser}
+  \begin{algorithmic}
+    \\
+    \Require taggedText : string
+    \\
+    \State regexPattern $\gets$ $<>(.*?)<>$
+    \State biasedSections : Array[string]
+    \\
+    \State biasedSections $\gets$ append(matchAll(taggedText, regexPattern))
+    \\
+    \Return biasedSections
+  \end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+  \caption{neutraliseBias}
+  \begin{algorithmic}
+    \\
+    \Require section : string
+    \Require LLM : string $\to$ string
+    \Require exampleData : Array[(string, string)]
+    \\
+
+    \State Role : enum $\gets$ \{ SYSTEM, USER, ASSISTANT \}
+    \State messages : Array[(Role, string)]
+    \\
+
+    \State messages $\gets$ append((Role.SYSTEM, "neutralise the bias in the text"))
+    \\
+    \For {(original, neutralised) in examplsysteData }
+      \State messages $\gets$ append((Role.USER, original))
+      \State messages $\gets$ append((Role.ASSISTANT, neutralised))
+    \EndFor
+    \\
+    \State LLM.messages $\gets$ messages
+    \\
+    \State neutralisedSection $\gets$ LLM(section)
+    \\
+    \Return neutralisedSection
+  \end{algorithmic}
+\end{algorithm}
+
+\subsubsection{Implementation - Python}
+
+\begin{verbatim}
+def get_parsed_text(text):
+  return re.findall(r'<>(.*?)<>', text)
+
+def remove_section_bias(section, llm, exampleData):
+  messages = []
+  messages.append({
+    "role": "system",
+    "content":  "you are a bias neutralisation system. Given a 
+    sentence you should be able to neutralise bias, whilst keeping 
+    the same meaning within an unknown context"
+  })
+
+  for example in exampleData:
+    messages.append({
+      "role": "user",
+      "content": example[0]
+    })
+    messages.append({
+      "role": "assistant",
+      "content": example[1]
+    })
+
+  messages.append({
+    "role": "user",
+    "content": section
+  })
+
+
+  response = llm.chat.completions.create(model="gpt-4.1-mini", messages=messages)
+  return response.choices[0].message.content
+\end{verbatim}
+
+\subsection{Creating a RESTful API}
+
+\subsubsection{Rationale}
+
+I decided to use REST APIs to encapsulate all of the functionality, and allow
+a front-end to call the API. This will provide the user with a GUI, and allow 
+them to interact with the system. For the
+prototype I implemented a web based GUI, using Typescript and React.
+
+The prototype has a single endpoint:
+
+\begin{verbatim}
+      (POST, "/remove-bias")
+\end{verbatim}
+
+which removes the bias of the whole text, in the post body:
+
+\begin{verbatim}
+  {text: string}
+\end{verbatim}
+
+The above outlines a valid json request to the endpoint.
+
+\subsubsection{Algorithm}
+
+\begin{algorithm}[H]
+  \caption{Bias Removal API}
+  \begin{algorithmic}
+    \\
+    \Require route $\gets$ (POST, "/remove-bias")
+    \Require req : HTTP Request 
+    \\
+    \State body $\gets$ req.getBody()
+
+    \If {body is invalid} {
+
+    \Return json(\{"error": "invalid request"\}) with status 400
+
+    }
+    \EndIf
+    \\
+    \State text $\gets$ body["text"]
+    \If {text is empty} {
+
+    \Return json(\{"error": "invalid request"\}) with status 400
+
+    }
+    \EndIf
+
+    \\
+
+    \State taggedText $\gets$ tagText(text)
+    \State taggedSections $\gets$ getTaggedSections(taggedText)
+    \\
+
+    \If {taggedSections is empty} {
+
+      \Return json(\{"result": text\}) with status 200
+
+    }
+
+    \EndIf
+    \\
+    \State neutralisedSections: Array[string]
+    \\
+    \For {section in taggedSections}
+
+    \State neutralisedSections $\gets$  append(neutraliseSection(section))
+
+    \EndFor
+    \\
+    \State neutralisedText $\gets$ 
+    replaceTaggedSections(taggedText, neutralisedSections)
+    \\
+
+    \Return json(\{"result": neutralisedText\}) with status 200
+
+  \end{algorithmic}
+\end{algorithm}
+
+\subsubsection{Implementation - Python (Flask)}
+
+\begin{verbatim}
+  @app.route("/remove-bias", methods=["POST"])
+  def remove_bias():
+    body = request.get_json(silent=True)
+    if body is None:
+      return jsonify({"error": "invalid request"}), 400
+
+    text = data.get("text")
+    if text is None:
+      return jsonify({"error": "invalid request"}), 400
+
+    res = remove_text_bias(text)
+
+    return jsonify("result": res), 200
+
+  def remove_text_bias(text):
+    tagged_text = tag_biased_sections(text)
+    biased_sections = get_biased_sections(tagged_text)
+
+    if len(biased_sections) == 0:
+      return text
+
+    neutralised_sections = []
+
+    for section in biased_sections:
+      neutralised_sections.append(remove_section_bias(section))
+
+    for section in neutralised_sections:
+      neutralised_text = re.sub(r'<>(.*?)<>', section, neutralised_text, count=1)
+
+    return neutralised_text
+
+\end{verbatim}
+
+\subsection{Evalutation of Initial Prototype}
+
+The initial prototype works, but barely. It can turn an explicity biased text into
+one that is implicity biased. Wich might be worse in a way, since implicit bias
+is far more problematic.
+
+For example take the following test case \parencite{chatgpt2025}:
+
+\begin{verbatim}
+tests/test_tag_biased_sections The manager claimed that 
+<>the younger women on the team shouldn’t handle negotiations because 
+they’re too emotional<>, and instead suggested giving the important 
+tasks to <>the older men, who he said are naturally more reliable<>. 
+He also remarked that <>employees from that specific Asian community usually 
+struggle with leadership roles and should stick to basic support work<>.
+\end{verbatim}
+
+
+\begin{verbatim}
+tests/test_rest_api.py::test_remove_bias The manager claimed that 
+Team members assigned to negotiations should be based on skills and 
+experience rather than assumptions about emotions, and instead suggested 
+giving the important tasks to the older men, who he said Some individuals 
+tend to be more reliable. He also remarked that Some employees may find 
+leadership roles more challenging and may excel in support work, 
+regardless of their community background.
+\end{verbatim}
+
+It's very obvious about what the bias here is, even if it isn't explicitly stated, for example
+take the section "skills and experience rather than assumptions about emotions, and instead 
+suggested giving the important tasks to the older men", It's obvious that this is targeted
+at young women, or young people in general even if the bias isn't explicity stated.
+
+Another point of failure is that the sentence might sometimes just stop making sense: "to 
+the older men, who he said Some individuals tend to be more reliable," this sentence
+clearly has some grammatical issues.
+\\
+
+These are the main limitations of the prototype as it is.
+
+
+\printbibliography
+
+\end{document}
