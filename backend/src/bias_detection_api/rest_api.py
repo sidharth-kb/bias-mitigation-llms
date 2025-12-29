@@ -17,7 +17,6 @@ CORS(app, origins=["http://localhost:5173"])
  {
     section: {
         context: ...,
-        section_id: ...,
         text: ...
     },
     mode: ...
@@ -28,7 +27,6 @@ def remove_section_bias_api():
 
     class Section(BaseModel):
         context: str
-        section_id: int
         text: str
 
     class Payload(BaseModel):
@@ -51,13 +49,11 @@ def remove_section_bias_api():
     neutralised_text = remove_section_bias({
         "text": payload.section.text,
         "context": payload.section.context,
-        "section_id": payload.section.section_id
     })
 
     return jsonify({
-        "neutralised_text": neutralised_text,
-        "section_id": payload.section.section_id
-    })
+        "neutralised_text": neutralised_text
+    }), 200
 
 
 
