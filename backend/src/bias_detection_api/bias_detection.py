@@ -6,7 +6,6 @@ from helpers.load_key import load_key
 """
 TODO:
 - [ ] create unit tests
-- [ ] create a single interface to expose for API
 """
 
 CLIENT = OpenAI(api_key=load_key())
@@ -126,8 +125,16 @@ def tag_biased_sections(text):
     tagged_text = response.choices[0].message.content
     return tagged_text
 
+def add_bias_id(tagged_text):
+    id = 0
+    for i in range(len(tagged_text)):
+        if tagged_text[i] == '<' and tagged_text[i + 1] != '/':
+            tagged_text = tagged_text[:i + 1] + f"id:{id} " + tagged_text[i + 1:]
+            id += 1
+
+    return tagged_text
+
 def split_context(text: str):
-    # Step 1: split into sentences
     sentences = re.split(r'(?<=[.!?])\s+', text)
 
     segments = []
@@ -138,7 +145,6 @@ def split_context(text: str):
         for match in BIAS_PATTERN.finditer(sentence):
             start, end = match.span()
 
-            # Normal text before bias
             if start > cursor:
                 normal_text = sentence[cursor:start].strip()
                 if normal_text:
@@ -147,7 +153,6 @@ def split_context(text: str):
                         "text": normal_text
                     })
 
-            # Bias segment
             segments.append({
                 "type": "bias",
                 "bias_type": match.group(1),
@@ -156,7 +161,6 @@ def split_context(text: str):
 
             cursor = end
 
-        # Remaining normal text in sentence
         if cursor < len(sentence):
             normal_text = sentence[cursor:].strip()
             if normal_text:
@@ -168,10 +172,10 @@ def split_context(text: str):
     return segments
 
 
-def parse_biased_sections(text: str, context_window: int = 2) -> dict:
+def parse_biased_sections(text, context_window = 2):
     segments = split_context(text)
-    results = {}
-    section_id = 1
+    results = []
+    section_id = 0
 
     for i, segment in enumerate(segments):
         if segment["type"] != "bias":
@@ -182,15 +186,22 @@ def parse_biased_sections(text: str, context_window: int = 2) -> dict:
 
         context_parts = [segments[i]["text"] for i in range(ctx_window_start, ctx_window_end)]
 
-        results[f"section_{section_id}"] = {
+        results.append({
                 "context": " ".join(context_parts),
-                "location": i,
+                "section_id": section_id,
                 "text": segment["text"]
-                }
+                })
 
         section_id += 1
 
     return results
+
+def detect_bias(text, context_size=2):
+    tagged_text = tag_biased_sections(text)
+    parsed_text = parse_biased_sections(tagged_text, context_size)
+    tagged_text = add_bias_id(tagged_text)
+
+    return tagged_text, parsed_text
 
 if __name__ == "__main__":
     tagged_text = """Earlier in the afternoon, the leadership team gathered to review quarterly performance. 
@@ -201,3 +212,4 @@ The meeting concluded with no formal decisions being recorded."""
     results = parse_biased_sections(tagged_text)
 
     print(f"\ntagged_text:\n{tagged_text}\nparsed into dictionary:\n{results}")
+    print(add_bias_id(tagged_text))
