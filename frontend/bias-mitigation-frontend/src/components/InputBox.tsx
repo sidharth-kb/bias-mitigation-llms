@@ -22,7 +22,7 @@ export function InputBox( { setText, setContextSize } : InputBoxProps) {
     <section id="inputSection">
       <form action={handleForm}>
         <textarea name="user_text" placeholder="Write your input here"/>
-        <input type="range" min="1" max="20" name="context_size" defaultValue={2}/>
+        <input type="range" min="3" max="20" name="context_size" defaultValue={3}/>
         <button type="submit">Submit</button>
       </form>
     </section>
