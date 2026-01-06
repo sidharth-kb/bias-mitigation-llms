@@ -3,7 +3,7 @@ import type { BiasProps } from "./interfaces";
 
 async function rewriteSection(context: string, text: string, setSection: React.Dispatch<React.SetStateAction<string>>) {
   try{
-    const res = await fetch("http://127.0.0.1:8080/remove-section-bias",{
+    const res = await fetch("/api/remove-section-bias",{
       method: "POST",
       headers: {
         "Content-Type": "application/json"

@@ -80,5 +80,9 @@ def tag_text():
                     "parsed_text": parsed_text,
                     "bias": len(parsed_text) > 0}), 200
 
+@app.get("/health")
+def health():
+    return {"ok": True}, 200
+
 if __name__ == "__main__":
     app.run(debug=True, port=8080)

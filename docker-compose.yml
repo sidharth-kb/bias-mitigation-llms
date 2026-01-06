@@ -1,0 +1,16 @@
+services:
+  backend:
+    image: bias-mitigation/backend:1.0.0
+    environment:
+      API_KEY_PATH: /run/secrets/api_key
+    volumes:
+      - ~/secrets/api_key.txt:/run/secrets/api_key:ro
+    ports:
+      - "8080:8080"
+
+  frontend:
+    image: bias-mitigation/frontend:1.0.0
+    depends_on:
+      - backend
+    ports:
+      - "3000:80"

@@ -9,7 +9,7 @@ export function OutputBox({ text, contextSize }: {text: string, contextSize: num
 
   useEffect(() => {
     if (text !== "") {
-      fetch(`http://127.0.0.1:8080/tag-text?context_size=${contextSize}`, {
+      fetch(`/api/tag-text?context_size=${contextSize}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
