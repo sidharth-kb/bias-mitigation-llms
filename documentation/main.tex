@@ -1,4 +1,4 @@
-\documentclass[11pt]{article}
+\documentclass[11pt]{report}
 
 \usepackage{amsmath, amssymb}
 \usepackage{hyperref}
@@ -14,14 +14,22 @@
 
 \addbibresource{references.bib}
 
-\title{Bias Mitigation and Detection Prototype}
+\title{Bias Mitigation and Detection for LLMs}
 \author{Sidharth Kolladikkal Biju}
 \date{\today}
 
 \begin{document}
 \maketitle
 
-\section{Bias Neutralisation Subsystem v1}
+\tableofcontents
+
+\chapter{Introduction}
+
+
+
+\chapter{Prototype}
+
+\section{Bias Neutralisation Subsystem}
 
 \subsection{Identifying Bias}
 
@@ -32,7 +40,9 @@ first place. There's no point trying to remove the bias in a text that has none.
 This step will save costs, and improve the efficiency of the overall process.
 \\
 
-For the prototype I decided to use few-shot prompting, which is quick and easy,
+For the prototype I decided to use few-shot prompting, in combination with role prompting 
+\parencite{boonstra_2025}, and system prompting, 
+which is quick and easy,
 but shown to be unreliable for NLP type tasks, especially when asked to explain
 their chain of reasoning \parencite{ye_durrett_2022}.
 Therefore I will only be using it as a placeholder for other methods I plan to
@@ -146,46 +156,46 @@ few-shot prompting.
 \subsubsection{Algorithm}
 
 \begin{algorithm}[H]
-  \caption{textParser}
-  \begin{algorithmic}
-    \\
-    \Require taggedText : string
-    \\
-    \State regexPattern $\gets$ $<>(.*?)<>$
-    \State biasedSections : Array[string]
-    \\
-    \State biasedSections $\gets$ append(matchAll(taggedText, regexPattern))
-    \\
-    \Return biasedSections
-  \end{algorithmic}
+\caption{Text Parser}
+\begin{algorithmic}[1]
+\Require $taggedText$ : string
+\Ensure $biasedSections$ : array of strings
+
+\State $regexPattern \gets \langle\!\langle (.*?) \rangle\!\rangle$
+\State $biasedSections \gets$ empty array
+
+\State $matches \gets \text{matchAll}(taggedText,\ regexPattern)$
+\ForAll{$match \in matches$}
+    \State Append $match$ to $biasedSections$
+\EndFor
+
+\State \Return $biasedSections$
+\end{algorithmic}
 \end{algorithm}
 
 \begin{algorithm}[H]
-  \caption{neutraliseBias}
-  \begin{algorithmic}
-    \\
-    \Require section : string
-    \Require LLM : string $\to$ string
-    \Require exampleData : Array[(string, string)]
-    \\
+\caption{Neutralise Bias}
+\begin{algorithmic}[1]
+\Require $section$ : string
+\Require $LLM$ : function $(\text{string}) \rightarrow (\text{string})$
+\Require $exampleData$ : array of $(string,\ string)$ pairs
+\Ensure $neutralisedSection$ : string
 
-    \State Role : enum $\gets$ \{ SYSTEM, USER, ASSISTANT \}
-    \State messages : Array[(Role, string)]
-    \\
+\State Define enum $Role \gets \{\text{SYSTEM},\ \text{USER},\ \text{ASSISTANT}\}$
+\State $messages \gets$ empty array of $(Role,\ string)$
 
-    \State messages $\gets$ append((Role.SYSTEM, "neutralise the bias in the text"))
-    \\
-    \For {(original, neutralised) in examplsysteData }
-      \State messages $\gets$ append((Role.USER, original))
-      \State messages $\gets$ append((Role.ASSISTANT, neutralised))
-    \EndFor
-    \\
-    \State LLM.messages $\gets$ messages
-    \\
-    \State neutralisedSection $\gets$ LLM(section)
-    \\
-    \Return neutralisedSection
-  \end{algorithmic}
+\State Append $(Role.SYSTEM,\ \text{"neutralise the bias in the text"})$ to $messages$
+
+\ForAll{$(original,\ neutralised) \in exampleData$}
+    \State Append $(Role.USER,\ original)$ to $messages$
+    \State Append $(Role.ASSISTANT,\ neutralised)$ to $messages$
+\EndFor
+
+\State $LLM.messages \gets messages$
+\State $neutralisedSection \gets LLM(section)$
+
+\State \Return $neutralisedSection$
+\end{algorithmic}
 \end{algorithm}
 
 \subsubsection{Implementation - Python}
@@ -249,58 +259,39 @@ The above outlines a valid json request to the endpoint.
 \subsubsection{Algorithm}
 
 \begin{algorithm}[H]
-  \caption{Bias Removal API}
-  \begin{algorithmic}
-    \\
-    \Require route $\gets$ (POST, "/remove-bias")
-    \Require req : HTTP Request 
-    \\
-    \State body $\gets$ req.getBody()
+\caption{Bias Removal API}
+\begin{algorithmic}[1]
+\Require Route $(\text{POST},\ \texttt{"/remove-bias"})$
+\Require $req$ : HTTP request
+\Ensure JSON response
 
-    \If {body is invalid} {
+\State $body \gets req.\text{getBody()}$
+\If{$body$ is invalid}
+    \State \Return JSON$\big(\{\text{"error"}:\ \text{"invalid request"}\}\big)$ with status $400$
+\EndIf
 
-    \Return json(\{"error": "invalid request"\}) with status 400
+\State $text \gets body[\text{"text"}]$
+\If{$text$ is empty}
+    \State \Return JSON$\big(\{\text{"error"}:\ \text{"invalid request"}\}\big)$ with status $400$
+\EndIf
 
-    }
-    \EndIf
-    \\
-    \State text $\gets$ body["text"]
-    \If {text is empty} {
+\State $taggedText \gets \text{tagText}(text)$
+\State $taggedSections \gets \text{getTaggedSections}(taggedText)$
 
-    \Return json(\{"error": "invalid request"\}) with status 400
+\If{$taggedSections$ is empty}
+    \State \Return JSON$\big(\{\text{"result"}:\ text\}\big)$ with status $200$
+\EndIf
 
-    }
-    \EndIf
+\State $neutralisedSections \gets$ empty array
 
-    \\
+\ForAll{$section \in taggedSections$}
+    \State Append $\text{neutraliseSection}(section)$ to $neutralisedSections$
+\EndFor
 
-    \State taggedText $\gets$ tagText(text)
-    \State taggedSections $\gets$ getTaggedSections(taggedText)
-    \\
+\State $neutralisedText \gets \text{replaceTaggedSections}(taggedText,\ neutralisedSections)$
 
-    \If {taggedSections is empty} {
-
-      \Return json(\{"result": text\}) with status 200
-
-    }
-
-    \EndIf
-    \\
-    \State neutralisedSections: Array[string]
-    \\
-    \For {section in taggedSections}
-
-    \State neutralisedSections $\gets$  append(neutraliseSection(section))
-
-    \EndFor
-    \\
-    \State neutralisedText $\gets$ 
-    replaceTaggedSections(taggedText, neutralisedSections)
-    \\
-
-    \Return json(\{"result": neutralisedText\}) with status 200
-
-  \end{algorithmic}
+\State \Return JSON$\big(\{\text{"result"}:\ neutralisedText\}\big)$ with status $200$
+\end{algorithmic}
 \end{algorithm}
 
 \subsubsection{Implementation - Python (Flask)}
@@ -387,7 +378,392 @@ clearly has some grammatical issues.
 
 These are the main limitations of the prototype as it is.
 
-\section{Bias Neutralisation Subsystem v2}
+\section{Prototype Improvements}
+
+\subsection{Overview}
+
+To enhance the prototype, I decided to add the following features to the prototype
+to improve the system architecture, as well as the overall performance.
+
+\begin{itemize}
+  \item Improved prompt-engineering for more descriptive tagging
+  \item Improved context, to improve how well the rewrite fits with the text
+    by providing the LLM with additional context.
+  \item Highlighting subsections of the text, and allowing for specific sub-
+    sections to be rewritten.
+  \item  Containerising the front-end, and back-end.
+\end{itemize}
+
+\subsection{Improved Tagging}
+
+\subsubsection{Rationale}
+
+I wanted to implement improved tagging so that I had more control over
+the outcome of the LLM. I wanted to distinguish between different sources of
+bias, which requires more descriptive tags.
+
+\subsubsection{Implementation}
+
+To improve the tagging, I had to improve the prompts used currently. For this I
+used a technique called meta-prompting \parencite{ye_axmed_pryzant_khani_2024}, which
+simply involves using an LLM to iteratively create better prompts.
+
+So, I used ChatGPT for the meta-prompting, and passed in the previous prompts, whilst
+specifying that I wanted tags that could would determine a bias type.
+
+\begin{verbatim}
+"content": (
+"You are a bias detection system. "
+"Identify explicitly biased language in text. "
+"Surround ONLY the biased phrase(s) with XML-style tags indicating the bias type. "
+"Use ONLY the following tags: <gender>, <age>, <race>. "
+"If multiple biased phrases exist, tag ALL of them. "
+"Do NOT rephrase the sentence. "
+"Do NOT add explanations. "
+"If no bias exists, return the original text unchanged. "
+"Tag only the biased claim itself, not consequences or actions. "
+"If a biased phrase could belong to multiple categories, choose the single most appropriate one."
+)
+\end{verbatim}
+\parencite{chatgpt2025}
+
+Here is an example of how I used meta-prompting to improve the system prompting 
+\parencite{boonstra_2025}.
+
+I also improved the general performance by including more diverse examples for the
+few-shot prompting methodology \parencite{boonstra_2025}:
+
+\begin{verbatim}
+{
+"role": "user",
+"content": (
+"During the hiring discussion, the director said that women are too emotional "
+"for leadership roles, that older employees struggle to adapt to new technologies, "
+"and that certain racial groups are naturally less intelligent."
+)
+},
+{
+"role": "assistant",
+"content": (
+"During the hiring discussion, the director said that "
+"<gender>women are too emotional for leadership roles</gender>, "
+"that <age>older employees struggle to adapt to new technologies</age>, "
+"and that <race>certain racial groups are naturally less intelligent</race>."
+)
+},
+\end{verbatim}
+
+This is an example where a sentence has multiple sources of bias.
+
+\begin{verbatim}
+{
+"role": "user",
+"content": (
+"The team decided to reschedule the meeting due to conflicting availability."
+)
+},
+{
+"role": "assistant",
+"content": (
+"The team decided to reschedule the meeting due to conflicting availability."
+)
+},
+\end{verbatim}
+
+This is an example where there are no sources of bias. I did this so that the 
+LLM could better handle any edge cases.
+
+\subsection{Improved Context}
+
+\subsubsection{Rationale}
+
+One of the main problems of the initial prototype was that it sometimes produced
+results that were grammatically incorrect. To fix this I decided to implement
+contextual prompting \parencite{boonstra_2025}. But, to do this I had to dynamically
+generate the context for each biased section.
+
+I did this mainly through the use of regular expressions, and also an added ID field
+to the tags to identify which context belonged to what tag.
+
+\subsubsection{Algorithm}
+
+
+
+\begin{algorithm}[H]
+\caption{Split Context into Normal and Biased Segments}
+\begin{algorithmic}[1]
+\Require $text$ : input string
+\Ensure $segments$ : list of segmented text blocks
+
+\State $sentences \gets$ split $text$ using regex \texttt{(?<=[.!?])\textbackslash s+}
+\State $segments \gets$ empty list
+
+\ForAll{$sentence \in sentences$}
+    \State $cursor \gets 0$
+
+    \ForAll{$match \in$ \texttt{BIAS\_PATTERN.finditer(sentence)}}
+        \State $(start, end) \gets$ span of $match$
+
+        \If{$start > cursor$}
+            \State $normal\_text \gets$ trim($sentence[cursor : start]$)
+            \If{$normal\_text \neq \emptyset$}
+                \State Append $\{type:\text{"normal"},\ text: normal\_text\}$ to $segments$
+            \EndIf
+        \EndIf
+
+        \State Append $\{type:\text{"bias"},\ bias\_type: match.group(1),\ text: \text{trim}(match.group(2))\}$ to $segments$
+        \State $cursor \gets end$
+    \EndFor
+
+    \If{$cursor < \text{length}(sentence)$}
+        \State $normal\_text \gets$ trim($sentence[cursor : ]$)
+        \If{$normal\_text \neq \emptyset$}
+            \State Append $\{type:\text{"normal"},\ text: normal\_text\}$ to $segments$
+        \EndIf
+    \EndIf
+\EndFor
+
+\State \Return $segments$
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption{Parse Biased Sections with Context Window}
+\begin{algorithmic}[1]
+\Require $text$ : string
+\Require $context\_window$ : integer
+\Ensure $results$ : array of records
+
+\State $segments \gets \text{splitContext}(text)$
+\State $results \gets$ empty array
+\State $section\_id \gets 0$
+
+\For{$i \gets 0$ to $\text{length}(segments) - 1$}
+    \If{$segments[i].type \neq \text{"bias"}$}
+        \State \textbf{continue}
+    \EndIf
+
+    \State $ctx\_start \gets \max(0,\ i - context\_window)$
+    \State $ctx\_end \gets \min(\text{length}(segments) - 1,\ i + context\_window)$
+
+    \State $context\_parts \gets$ empty list
+    \For{$j \gets ctx\_start$ to $ctx\_end - 1$}
+        \State Append $segments[j].text$ to $context\_parts$
+    \EndFor
+
+    \State Append $\{$
+        $context:\ \text{join}(context\_parts,\ " "),$
+        $section\_id:\ section\_id,$
+        $text:\ segments[i].text$
+    $\}$ to $results$
+
+    \State $section\_id \gets section\_id + 1$
+\EndFor
+
+\State \Return $results$
+\end{algorithmic}
+\end{algorithm}
+
+
+\begin{algorithm}[H]
+\caption{Adding IDs to Opening Tags}
+\begin{algorithmic}[1]
+\Require $tagged\_text$ : string containing tagged elements
+\Ensure $tagged\_text$ with unique IDs added to opening tags
+
+\State $id \gets 0$
+\State $i \gets 0$
+
+\While{$i < \text{length}(tagged\_text)$}
+    \If{$tagged\_text[i] = \langle$ \textbf{and} $tagged\_text[i+1] \neq /$}
+        \State Insert string \texttt{"id:"}$id$\texttt{" "} at position $i+1$ in $tagged\_text$
+        \State $id \gets id + 1$
+    \EndIf
+    \State $i \gets i + 1$
+\EndWhile
+
+\State \Return $tagged\_text$
+\end{algorithmic}
+\end{algorithm}
+
+\subsubsection{Algorithms Explanation}
+
+The second algorithm splits the text by biased sections and sentences so if a sentence
+has a biased section: e.g. 
+\verb|This is an example <gender id=1> sentence|
+\verb|that </gender> contains bias.|
+
+it would be parsed as:
+
+\begin{verbatim}
+[
+  {
+    type: normal,
+    text: This is an example
+  },
+  {
+    type: bias,
+    bias_type: gender,
+    text: sentence that
+  },
+  {
+    type: normal,
+    text: contains bias.
+  }
+]
+\end{verbatim}
+
+The second algorithm produces the context for each bias section, and associates
+each section with an ID. If we have a context window $n$, it simply looks before 
+and after the biased section by $n$ sections, and joins them to create the context.
+
+For example if we have a context window of $2$, and we have a biased section at
+index $5$, the context would be constructed by joining all of the sections between
+indexes $3$ to $7$.
+
+The final algorithm simply adds the id to the tag, such that they match the section
+ids. This way we can understand which context belongs to which section, and where
+to locate the section.
+
+\subsubsection{Implementation - Python}
+
+\begin{verbatim}
+def add_bias_id(tagged_text):
+    id = 0
+    for i in range(len(tagged_text)):
+        if tagged_text[i] == '<' and tagged_text[i + 1] != '/':
+            tagged_text = tagged_text[:i + 1] + f"id:{id} " + tagged_text[i + 1:]
+            id += 1
+
+    return tagged_text
+
+def split_context(text):
+    sentences = re.split(r'(?<=[.!?])\s+', text)
+
+    segments = []
+
+    for sentence in sentences:
+        cursor = 0
+
+        for match in BIAS_PATTERN.finditer(sentence):
+            start, end = match.span()
+
+            if start > cursor:
+                normal_text = sentence[cursor:start].strip()
+                if normal_text:
+                    segments.append({
+                        "type": "normal",
+                        "text": normal_text
+                    })
+
+            segments.append({
+                "type": "bias",
+                "bias_type": match.group(1),
+                "text": match.group(2).strip()
+            })
+
+            cursor = end
+
+        if cursor < len(sentence):
+            normal_text = sentence[cursor:].strip()
+            if normal_text:
+                segments.append({
+                    "type": "normal",
+                    "text": normal_text
+                })
+
+    return segments
+
+
+def parse_biased_sections(text, context_window = 2):
+    segments = split_context(text)
+    results = []
+    section_id = 0
+
+    for i, segment in enumerate(segments):
+        if segment["type"] != "bias":
+            continue
+
+        ctx_window_start = max(0, i - context_window)
+        ctx_window_end = min(len(segments) - 1, i + context_window)
+
+        context_parts = [segments[i]["text"] for i in 
+          range(ctx_window_start, ctx_window_end)]
+
+        results.append({
+                "context": " ".join(context_parts),
+                "section_id": section_id,
+                "text": segment["text"]
+                })
+
+        section_id += 1
+
+    return results
+\end{verbatim}
+
+\subsection{Highlighting and Rewriting Subsections}
+
+\subsubsection{Rationale}
+
+Where in the previous version, users had no control over what part was
+rewritten, here I aim to give the users full control. Sections identified as
+bias will be colour-coded, and highlighted. The user can click on the highlighted
+section to rewrite that specific section of the text.
+
+This is to improve user interactivity, and allow users to see where sources
+of bias are. It also further optimise costs, since the user doesn't have to
+rewrite every section if they don't want to, which minimises the requests sent
+to the LLM.
+
+\subsubsection{Demo}
+
+I implemented this in React, so It's quite self-explanatory how everything works
+from just looking at how it looks:
+
+
+\includegraphics[width=\textwidth]{images/front-end-highlighting-demo.jpg}
+
+This is an example after some bias text is inserted, text generated by ChatGPT
+\parencite{chatgpt2025}. So age based bias is highlighted with blue, gender bias
+is highlighted with yellow, and race based bias is highlighted in pink.
+
+
+\includegraphics[width=\textwidth]{images/front-end-rewriting-demo.jpg}
+
+Here I have selected specific parts of the text to rewrite.
+
+\subsection{Deployment}
+
+For the deployment I have created Docker images for the front-end, and the
+back-end separately. This will make it easier to scale the application for
+more intensive tasks, and it will also help in modularising the application further.
+
+\section{Evaluation}
+
+After trying out different techniques, it's obvious that utilising solely a few-shot prompting 
+engineering approach isn't good enough. Even after added context, there are still issues
+with grammar such as capitalisation, and the LLM seems to still be rewriting the text in
+such a way that it turns explicit bias into more subtle implicit bias.
+\\
+
+For further development regarding prompt engineering, I would like to implement chain of 
+thought reasoning \parencite{boonstra_2025}, where I might explain a chain of thought
+for determining whether there is bias against a specific group.
+\\
+
+In addition, it's obvious that using a small dataset isn't enough to tackle a wide
+area like bias, even if it's been split into sub-categories, which is why I believe it is
+necessary to implement a RAG system, which can provide better context, and factual grounding
+for my system \parencite{agada_etal_2025}.
+\\
+
+I also want to implement reinforcement learning, where I train an LLM as a grader
+and iteratively produce outputs until a desired level of quality is achieved. This
+seems to be the approach taken to tackle more open-ended criteria, such as bias,
+where we cannot have a mathematical specification to quantify the quality of a text
+\parencite{zhou_etal_2025}.
+
+\clearpage
 
 \printbibliography
 

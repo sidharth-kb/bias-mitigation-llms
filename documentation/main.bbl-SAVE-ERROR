@@ -19,14 +19,128 @@
 
 \refsection{0}
   \datalist[entry]{nyt/global//global/global/global}
+    \entry{boonstra_2025}{book}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=154096316843c6662fbc47ed9c51de94}{%
+           family={Boonstra},
+           familyi={B\bibinitperiod},
+           given={Lee},
+           giveni={L\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{154096316843c6662fbc47ed9c51de94}
+      \strng{fullhash}{154096316843c6662fbc47ed9c51de94}
+      \strng{fullhashraw}{154096316843c6662fbc47ed9c51de94}
+      \strng{bibnamehash}{154096316843c6662fbc47ed9c51de94}
+      \strng{authorbibnamehash}{154096316843c6662fbc47ed9c51de94}
+      \strng{authornamehash}{154096316843c6662fbc47ed9c51de94}
+      \strng{authorfullhash}{154096316843c6662fbc47ed9c51de94}
+      \strng{authorfullhashraw}{154096316843c6662fbc47ed9c51de94}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{month}{2}
+      \field{title}{Prompt Engineering}
+      \field{year}{2025}
+      \verb{urlraw}
+      \verb https://www.onlinebrandambassadors.com/stable/Google-Prompt-Engineering-Boonstra.pdf
+      \endverb
+      \verb{url}
+      \verb https://www.onlinebrandambassadors.com/stable/Google-Prompt-Engineering-Boonstra.pdf
+      \endverb
+    \endentry
+    \entry{chatgpt2025}{misc}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=0523b13262b12c215d8009938f5c14f1}{%
+           family={OpenAI},
+           familyi={O\bibinitperiod}}}%
+      }
+      \strng{namehash}{0523b13262b12c215d8009938f5c14f1}
+      \strng{fullhash}{0523b13262b12c215d8009938f5c14f1}
+      \strng{fullhashraw}{0523b13262b12c215d8009938f5c14f1}
+      \strng{bibnamehash}{0523b13262b12c215d8009938f5c14f1}
+      \strng{authorbibnamehash}{0523b13262b12c215d8009938f5c14f1}
+      \strng{authornamehash}{0523b13262b12c215d8009938f5c14f1}
+      \strng{authorfullhash}{0523b13262b12c215d8009938f5c14f1}
+      \strng{authorfullhashraw}{0523b13262b12c215d8009938f5c14f1}
+      \field{sortinit}{O}
+      \field{sortinithash}{2cd7140a07aea5341f9e2771efe90aae}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{ChatGPT (GPT-5.2)}
+      \field{year}{2025}
+      \verb{urlraw}
+      \verb https://chat.openai.com/
+      \endverb
+      \verb{url}
+      \verb https://chat.openai.com/
+      \endverb
+    \endentry
+    \entry{ye_axmed_pryzant_khani_2024}{book}{}{}
+      \name{author}{4}{}{%
+        {{un=1,uniquepart=given,hash=597f9349f791a229b13e42bc4c4cb609}{%
+           family={Ye},
+           familyi={Y\bibinitperiod},
+           given={Qinyuan},
+           giveni={Q\bibinitperiod},
+           givenun=1}}%
+        {{un=0,uniquepart=base,hash=9b003468e61ea4eb15438cd82476b254}{%
+           family={Axmed},
+           familyi={A\bibinitperiod},
+           given={Maxamed},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=698d622cecf56462344d6f3b6a91f474}{%
+           family={Pryzant},
+           familyi={P\bibinitperiod},
+           given={Reid},
+           giveni={R\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=cce7236c358c86293a63037af2316088}{%
+           family={Khani},
+           familyi={K\bibinitperiod},
+           given={Fereshte},
+           giveni={F\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{e232190c68eb87edce8519f941b81cf7}
+      \strng{fullhash}{7b1f985d69f2456757d7038476933eeb}
+      \strng{fullhashraw}{7b1f985d69f2456757d7038476933eeb}
+      \strng{bibnamehash}{e232190c68eb87edce8519f941b81cf7}
+      \strng{authorbibnamehash}{e232190c68eb87edce8519f941b81cf7}
+      \strng{authornamehash}{e232190c68eb87edce8519f941b81cf7}
+      \strng{authorfullhash}{7b1f985d69f2456757d7038476933eeb}
+      \strng{authorfullhashraw}{7b1f985d69f2456757d7038476933eeb}
+      \field{sortinit}{Y}
+      \field{sortinithash}{fd67ad5a9ef0f7456bdd9aab10fe1495}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Prompt Engineering a Prompt Engineer}
+      \field{year}{2024}
+      \field{pages}{355\bibrangedash 385}
+      \range{pages}{31}
+      \verb{urlraw}
+      \verb https://aclanthology.org/2024.findings-acl.21.pdf
+      \endverb
+      \verb{url}
+      \verb https://aclanthology.org/2024.findings-acl.21.pdf
+      \endverb
+    \endentry
     \entry{ye_durrett_2022}{misc}{}{}
       \name{author}{2}{}{%
-        {{un=0,uniquepart=base,hash=8cc932e16fdf2bb8257274012c78a4a7}{%
+        {{un=1,uniquepart=given,hash=8cc932e16fdf2bb8257274012c78a4a7}{%
            family={Ye},
            familyi={Y\bibinitperiod},
            given={Xi},
            giveni={X\bibinitperiod},
-           givenun=0}}%
+           givenun=1}}%
         {{un=0,uniquepart=base,hash=33c8824e909897ff97adefd86d3c952a}{%
            family={Durrett},
            familyi={D\bibinitperiod},

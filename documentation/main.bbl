@@ -19,6 +19,98 @@
 
 \refsection{0}
   \datalist[entry]{nyt/global//global/global/global}
+    \entry{agada_etal_2025}{article}{}{}
+      \name{author}{4}{}{%
+        {{un=0,uniquepart=base,hash=bbd9e426088b2a0973ffe897bf1a94de}{%
+           family={Agada},
+           familyi={A\bibinitperiod},
+           given={Joseph\bibnamedelima Oche},
+           giveni={J\bibinitperiod\bibinitdelim O\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=d743b52fbd7a97ed53b2eca4c1bfe69f}{%
+           family={Ademola},
+           familyi={A\bibinitperiod},
+           given={Glory\bibnamedelima Folashade},
+           giveni={G\bibinitperiod\bibinitdelim F\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=5690749c455a19bfd3f12d7e4ec700fe}{%
+           family={Ghosal},
+           familyi={G\bibinitperiod},
+           given={Tirthankar},
+           giveni={T\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=0c9c0d1d6911a329bdf1738a857e4445}{%
+           family={Biswas},
+           familyi={B\bibinitperiod},
+           given={Arpan},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{5a9cf3660c87e651b1b01e624b6e5031}
+      \strng{fullhash}{887521547ee950c02b069e3643a32b2a}
+      \strng{fullhashraw}{887521547ee950c02b069e3643a32b2a}
+      \strng{bibnamehash}{5a9cf3660c87e651b1b01e624b6e5031}
+      \strng{authorbibnamehash}{5a9cf3660c87e651b1b01e624b6e5031}
+      \strng{authornamehash}{5a9cf3660c87e651b1b01e624b6e5031}
+      \strng{authorfullhash}{887521547ee950c02b069e3643a32b2a}
+      \strng{authorfullhashraw}{887521547ee950c02b069e3643a32b2a}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eprinttype}{arXiv}
+      \field{journaltitle}{arXiv}
+      \field{month}{7}
+      \field{title}{A Systematic Review of Key Retrieval-Augmented Generation (RAG) Systems: Progress, Gaps, and Future Directions}
+      \field{year}{2025}
+      \verb{doi}
+      \verb 10.48550/arXiv.2507.18910
+      \endverb
+      \verb{eprint}
+      \verb 2507.18910
+      \endverb
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/2507.18910
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/2507.18910
+      \endverb
+    \endentry
+    \entry{boonstra_2025}{book}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=154096316843c6662fbc47ed9c51de94}{%
+           family={Boonstra},
+           familyi={B\bibinitperiod},
+           given={Lee},
+           giveni={L\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{154096316843c6662fbc47ed9c51de94}
+      \strng{fullhash}{154096316843c6662fbc47ed9c51de94}
+      \strng{fullhashraw}{154096316843c6662fbc47ed9c51de94}
+      \strng{bibnamehash}{154096316843c6662fbc47ed9c51de94}
+      \strng{authorbibnamehash}{154096316843c6662fbc47ed9c51de94}
+      \strng{authornamehash}{154096316843c6662fbc47ed9c51de94}
+      \strng{authorfullhash}{154096316843c6662fbc47ed9c51de94}
+      \strng{authorfullhashraw}{154096316843c6662fbc47ed9c51de94}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{month}{2}
+      \field{title}{Prompt Engineering}
+      \field{year}{2025}
+      \verb{urlraw}
+      \verb https://www.onlinebrandambassadors.com/stable/Google-Prompt-Engineering-Boonstra.pdf
+      \endverb
+      \verb{url}
+      \verb https://www.onlinebrandambassadors.com/stable/Google-Prompt-Engineering-Boonstra.pdf
+      \endverb
+    \endentry
     \entry{chatgpt2025}{misc}{}{}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=0523b13262b12c215d8009938f5c14f1}{%
@@ -39,6 +131,7 @@
       \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
+      \field{note}{Large language model}
       \field{title}{ChatGPT (GPT-5.2)}
       \field{year}{2025}
       \verb{urlraw}
@@ -48,14 +141,67 @@
       \verb https://chat.openai.com/
       \endverb
     \endentry
-    \entry{ye_durrett_2022}{misc}{}{}
+    \entry{ye_axmed_pryzant_khani_2024}{inproceedings}{}{}
+      \name{author}{4}{}{%
+        {{un=1,uniquepart=given,hash=597f9349f791a229b13e42bc4c4cb609}{%
+           family={Ye},
+           familyi={Y\bibinitperiod},
+           given={Qinyuan},
+           giveni={Q\bibinitperiod},
+           givenun=1}}%
+        {{un=0,uniquepart=base,hash=9b003468e61ea4eb15438cd82476b254}{%
+           family={Axmed},
+           familyi={A\bibinitperiod},
+           given={Maxamed},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=698d622cecf56462344d6f3b6a91f474}{%
+           family={Pryzant},
+           familyi={P\bibinitperiod},
+           given={Reid},
+           giveni={R\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=cce7236c358c86293a63037af2316088}{%
+           family={Khani},
+           familyi={K\bibinitperiod},
+           given={Fereshte},
+           giveni={F\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{e232190c68eb87edce8519f941b81cf7}
+      \strng{fullhash}{7b1f985d69f2456757d7038476933eeb}
+      \strng{fullhashraw}{7b1f985d69f2456757d7038476933eeb}
+      \strng{bibnamehash}{e232190c68eb87edce8519f941b81cf7}
+      \strng{authorbibnamehash}{e232190c68eb87edce8519f941b81cf7}
+      \strng{authornamehash}{e232190c68eb87edce8519f941b81cf7}
+      \strng{authorfullhash}{7b1f985d69f2456757d7038476933eeb}
+      \strng{authorfullhashraw}{7b1f985d69f2456757d7038476933eeb}
+      \field{sortinit}{Y}
+      \field{sortinithash}{fd67ad5a9ef0f7456bdd9aab10fe1495}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Findings of the Association for Computational Linguistics (ACL)}
+      \field{title}{Prompt Engineering a Prompt Engineer}
+      \field{year}{2024}
+      \field{pages}{355\bibrangedash 385}
+      \range{pages}{31}
+      \verb{urlraw}
+      \verb https://aclanthology.org/2024.findings-acl.21.pdf
+      \endverb
+      \verb{url}
+      \verb https://aclanthology.org/2024.findings-acl.21.pdf
+      \endverb
+    \endentry
+    \entry{ye_durrett_2022}{article}{}{}
       \name{author}{2}{}{%
-        {{un=0,uniquepart=base,hash=8cc932e16fdf2bb8257274012c78a4a7}{%
+        {{un=1,uniquepart=given,hash=8cc932e16fdf2bb8257274012c78a4a7}{%
            family={Ye},
            familyi={Y\bibinitperiod},
            given={Xi},
            giveni={X\bibinitperiod},
-           givenun=0}}%
+           givenun=1}}%
         {{un=0,uniquepart=base,hash=33c8824e909897ff97adefd86d3c952a}{%
            family={Durrett},
            familyi={D\bibinitperiod},
@@ -77,18 +223,141 @@
       \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{journaltitle}{arXiv.org}
+      \field{eprinttype}{arXiv}
+      \field{journaltitle}{arXiv}
       \field{month}{10}
       \field{title}{The Unreliability of Explanations in Few-shot Prompting for Textual Reasoning}
       \field{year}{2022}
       \verb{doi}
-      \verb https://doi.org/10.48550/arXiv.2205.03401
+      \verb 10.48550/arXiv.2205.03401
+      \endverb
+      \verb{eprint}
+      \verb 2205.03401
       \endverb
       \verb{urlraw}
       \verb https://arxiv.org/abs/2205.03401
       \endverb
       \verb{url}
       \verb https://arxiv.org/abs/2205.03401
+      \endverb
+    \endentry
+    \entry{zhou_etal_2025}{article}{}{}
+      \name{author}{14}{}{%
+        {{un=0,uniquepart=base,hash=2ba74e19a950c5a40b85cc136538f42b}{%
+           family={Zhou},
+           familyi={Z\bibinitperiod},
+           given={Yang},
+           giveni={Y\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=edbcac1c5e4ed9956eee75d0d27fcefb}{%
+           family={Li},
+           familyi={L\bibinitperiod},
+           given={Sunzhu},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=9b0b8f748e5e6218072feb6d0738e877}{%
+           family={Liu},
+           familyi={L\bibinitperiod},
+           given={Shunyu},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=3df060fbb1dcef54a9f38c833e00336b}{%
+           family={Fang},
+           familyi={F\bibinitperiod},
+           given={Wenkai},
+           giveni={W\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=29fe2297c2f5d7a2be4e4584f7bbd3a4}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Kongcheng},
+           giveni={K\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=b79cb193b4517488220a6e05269c8ba9}{%
+           family={Zhao},
+           familyi={Z\bibinitperiod},
+           given={Jiale},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=ea5ded83c32d4e0d4039c85de01f6550}{%
+           family={Yang},
+           familyi={Y\bibinitperiod},
+           given={Jingwen},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=23a8d038a13e60e9376d006d3f9ff961}{%
+           family={Zhou},
+           familyi={Z\bibinitperiod},
+           given={Yihe},
+           giveni={Y\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=c766fc50458fecb52fca5aa0bdd9aed4}{%
+           family={Lv},
+           familyi={L\bibinitperiod},
+           given={Jianwei},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=1149e9b799ef6e92e469da707fc20264}{%
+           family={Zheng},
+           familyi={Z\bibinitperiod},
+           given={Tongya},
+           giveni={T\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=7b8f56ec01d3318b03ad9792672b4b46}{%
+           family={Lu},
+           familyi={L\bibinitperiod},
+           given={Hengtong},
+           giveni={H\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=06debc36f6b61a405e8f0da1c7ccd6ca}{%
+           family={Chen},
+           familyi={C\bibinitperiod},
+           given={Wei},
+           giveni={W\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=ad59b4c7b8a29d45be50b699400be942}{%
+           family={Xie},
+           familyi={X\bibinitperiod},
+           given={Yan},
+           giveni={Y\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=62f2f4ff0e18b5e38eaf0a72e3e88a86}{%
+           family={Song},
+           familyi={S\bibinitperiod},
+           given={Mingli},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{328efb4deeae08270da6773255dbae23}
+      \strng{fullhash}{33b74cbb1159a7ee77e7ad3fcf2f6fc1}
+      \strng{fullhashraw}{33b74cbb1159a7ee77e7ad3fcf2f6fc1}
+      \strng{bibnamehash}{328efb4deeae08270da6773255dbae23}
+      \strng{authorbibnamehash}{328efb4deeae08270da6773255dbae23}
+      \strng{authornamehash}{328efb4deeae08270da6773255dbae23}
+      \strng{authorfullhash}{33b74cbb1159a7ee77e7ad3fcf2f6fc1}
+      \strng{authorfullhashraw}{33b74cbb1159a7ee77e7ad3fcf2f6fc1}
+      \field{sortinit}{Z}
+      \field{sortinithash}{96892c0b0a36bb8557c40c49813d48b3}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eprinttype}{arXiv}
+      \field{journaltitle}{arXiv}
+      \field{month}{8}
+      \field{title}{Breaking the Exploration Bottleneck: Rubric-Scaffolded Reinforcement Learning for General LLM Reasoning}
+      \field{year}{2025}
+      \verb{doi}
+      \verb 10.48550/arXiv.2508.16949
+      \endverb
+      \verb{eprint}
+      \verb 2508.16949
+      \endverb
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/2508.16949
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/2508.16949
       \endverb
     \endentry
   \enddatalist
