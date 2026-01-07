@@ -23,6 +23,46 @@
 
 \tableofcontents
 
+\chapter*{January Deliverable}
+
+\section*{Progress}
+
+I have made a prototype system, which utilises prompt engineering techniques
+to detect and remove bias in text. The process included creating REST APIs,
+a front-end in React and Typescript, and a back-end in Python using Flask.
+I used the OpenAI API for the LLM.
+\\
+
+For the prototype, I decided to experiment with system architecture
+and a potential front-end solution. I containerised everything using Docker,
+which will make future development and testing significantly easier, since
+the systems are now loosely coupled, and can be interchanged easily. This
+will make evaluating performance and comparing versions easier and more
+efficient.
+\\
+
+In terms of changes of direction, I initially planned to implement a RAG
+system in the prototype, but I decided that this would be better for the actual
+system. This way, I can accurately evaluate the limitations of traditional
+prompt engineering techniques, and focus on creating better data pipelines
+for the system, and improving efficiency, so that I won’t have to worry about
+that later in development.
+\\
+
+I have also decided to utilise reinforcement learning, which is a technique
+I found out about it during my later research. Reinforcement learning seems to
+have been tried before for bias mitigation, but it seems to run into a problem, which I explain in the introduction. My approach seems to be one that is
+novel, and that’s what I’m going for in this project.
+
+\section*{Revised Plan}
+
+\begin{itemize}
+  \item Jan and Feb: Similarity Matching + RAG
+  \item Mar: Reinforcement Learning + System Architecture + Conclusion
+\end{itemize}
+
+I've decided to put a lot more during March, since I have a holiday.
+
 \chapter{Introduction}
 
 \section{Motivation}
@@ -30,48 +70,58 @@
 LLMs are increasingly being used in place of web browsers 
 \parencite{PadillaEtAl2025LLMBehavior}, so it's critical to understand how
 LLMs handle misinformation and bias. Since users often see one result
-from a prompt rather than multiple results in a traditional web browser, users'
-diversity of sources have reduced, and therefore makes it far more critical that
-we ensure that LLMs produce neutral and factual information, that doesn't
-propagate any harmful biases, or misinformation.
+from a prompt, rather than multiple results in a traditional web browser, the
+diversity of sources has reduced significantly. This makes it far more critical that
+we ensure that LLMs produce neutral and factual information. Information that doesn't
+propagate any harmful biases or misinformation.
 \\
 
-It has already been found that LLMs may tend to misclassify left-leaning articles as
-neutral \parencite{LinEtAl2025BiasDetection}, and depending on how LLMs are trained
-we can inadvertently put inherent bias into the system e.g. ensuring overall performance
+It has already been found that LLMs may tend to misclassify politically left-leaning 
+articles as
+neutral \parencite{LinEtAl2025BiasDetection}, and depending on how LLMs are trained,
+we can inadvertently put inherent bias into the system e.g. prioritising overall performance
 might bias the model towards majority groups, and against minority groups
 \parencite{RanjanGuptaSingh2024BiasLLMs}. Even modern models that seem to perform
-well in mitigating the results of bias, due to the availability of bias testing benchmarks
+well in mitigating bias, due to the availability of bias testing benchmarks
 have been found to be memorising patterns in these benchmarks. Augmenting the prompt reveals
-that when the text doesn't match these patterns the LLMs' biases start showing, especially in
-biases that aren't as well studied such as age, socio-economic, and appearance based biases
+that when the text doesn't match these patterns, the LLMs' biases start to show, especially 
+those that aren't as well-studied such as age-, socio-economic-, and appearance-based biases
 \parencite{MiandoabEtAl2025BreakingBenchmark}.
 \\
 
-It seems that traditional fine-tuning techniques such as few-shot prompting, role prompting
+It seems that traditional fine-tuning techniques, such as few-shot prompting, role prompting,
 contextual prompting, and system prompting \parencite{Chen2025PromptEngineeringReview}, might
 work in specific conditions, but can't be reliably generalised when the input doesn't
-match the patterns the LLM was trained on \parencite{MiandoabEtAl2025BreakingBenchmark}.
+match the patterns the LLM was tuned on \parencite{MiandoabEtAl2025BreakingBenchmark}.
 \\
 
 \section{Approach}
 
-I plan to use vocabulary-based matching \parencite{LinEtAl2025BiasDetection} to
-identify and evaluate bias. Utilising this as a reliable quantifier for the bias, I
-plan to use reinforcement learning to debias text, as it has been shown to be effictive in 
-more open-ended situations where the chain of thought can't be accurately modelled 
-for general cases \parencite{zhou_etal_2025}. I will also be using RAG, as it has been
-shown to provide a good way to provide context, and a factual foundation
+I plan to use embedding-based similarity matching \parencite{LinEtAl2025BiasDetection} to
+identify and evaluate bias. Utilising this as a reliable quantifier of bias, I
+plan to use reinforcement learning to debias text, as it has been shown to be effective in 
+more open-ended settings. Situations where the chain of thought can't be accurately modelled 
+for general cases \parencite{zhou_etal_2025}. I will also use RAG, as it has been
+shown to be a good way to provide context and a factual foundation for the model
 \parencite{agada_etal_2025}.
+\\
+
+Reinforcement learning has been used before in order to mitigate bias in LLMs 
+\parencite{cheng2024reinforcement}, but it faces the same problem:
+it seems to be memorising specific patterns, rather than the broader goal 
+of debiasing \parencite{MiandoabEtAl2025BreakingBenchmark}. This is why I'm 
+hoping that using a different scoring system for reinforcement learning - 
+embedding-based similarity matching \parencite{LinEtAl2025BiasDetection} - 
+will provide us with better results.
 
 \chapter{Prototype}
 
 \section{Overview}
 
 The prototype aims to explore traditional methodologies in prompt engineering
-\parencite{Chen2025PromptEngineeringReview}, and where they might fall short. It
-also serves as a guide to indicate how the final system architecture should 
-be designed to create the most efficient, and relevant solution.
+\parencite{Chen2025PromptEngineeringReview} and where they might fall short. It
+also serves as a guide for designing the final system architecture to create
+the most relevant and efficient solution.
 
 \section{Bias Neutralisation Subsystem}
 
@@ -79,15 +129,15 @@ be designed to create the most efficient, and relevant solution.
 
 \subsubsection{Rationale}
 
-First we need to identify whether or not the original text has any bias in the
+First, we need to identify whether or not the original text has any bias in the
 first place. There's no point trying to remove the bias in a text that has none.
-This step will save costs, and improve the efficiency of the overall process.
+This step will reduce costs, and improve the overall process efficiency.
 \\
 
-For the prototype I decided to use few-shot prompting, in combination with role prompting 
+For the prototype, I decided to use few-shot prompting, in combination with role prompting 
 \parencite{Chen2025PromptEngineeringReview}, and system prompting, 
-which is quick and easy,
-but shown to be unreliable for NLP type tasks, especially when asked to explain
+which is quick and easy
+but shown to be unreliable for NLP-type tasks, especially when asked to explain
 their chain of reasoning \parencite{ye_durrett_2022}.
 Therefore I will only be using it as a placeholder for other methods I plan to
 implement, namely RAG.
@@ -141,7 +191,7 @@ implement, namely RAG.
 
 For the parsing I decided to use Regex, which is a standard way to parse strings
 I scan the tagged string to see if it actually has any tags in it. I then append
-all of the tagged sections into an array. My reasoning for this is that by creating
+all of the tagged sections into an array. My reasoning is that by creating
 an array of biased sections to rewrite, rather than rewriting the whole document, I
 can take advantage of two things: 
 
@@ -150,13 +200,13 @@ can take advantage of two things:
   \item Enhanced user interactivity
 \end{enumerate}
 
-Point 1 is key for performance, I have essentially created a job queue, where each
+Point 1 is key to performance. I have essentially created a job queue, where each
 job is independent of the other. This is the perfect opportunity to parallelise the
-workload. This will speed up the performance of the system, where the LLMs only
+workload. This will improve system performance, where the LLMs only
 have to rewrite a small amount of text at each time.
 \\
 \\
-Point 2 is more related to user interaction, I plan to allow the user to select which
+Point 2 is more related to user interaction. I plan to allow the user to select which
 parts of the text to rewrite, giving them control over what is re-written in their text.
 It will also be useful for highlighting which parts of the text are biased, and also add
 additional annotations to these parts of the text.
@@ -592,9 +642,9 @@ from just looking at how it looks:
 
 \includegraphics[width=\textwidth]{images/front-end-highlighting-demo.jpg}
 
-This is an example after some bias text is inserted, text generated by ChatGPT
-\parencite{chatgpt2025}. So age based bias is highlighted with blue, gender bias
-is highlighted with yellow, and race based bias is highlighted in pink.
+This is an example after some biased text is inserted - original text generated by ChatGPT
+\parencite{chatgpt2025}. So, age-, gender-
+and race-based bias is highlighted with yellow, blue, and pink.
 
 
 \includegraphics[width=\textwidth]{images/front-end-rewriting-demo.jpg}
@@ -618,6 +668,16 @@ bias.
 
 As stated in the introduction, to make the system more reliable, I plan to implement
 RAG, and reinforcement learning.
+
+\chapter{Detecting Bias - Similarity Matching}
+
+\chapter{Providing Context - RAG}
+
+\chapter{Removing Bias - Reinforcement Learning}
+
+\chapter{System Architecture}
+
+\chapter{Conclusion}
 
 \clearpage
 
